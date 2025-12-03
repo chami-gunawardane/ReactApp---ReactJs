@@ -1,7 +1,6 @@
 import { useState, useEffect, use } from "react";
 import "./App.css";
 import Search from "./components/Search";
-
 //API - Appliation Programming Interface - a set of rules that allows different software entities to communicate with each other.
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -70,6 +69,18 @@ function App() {
 
         <section className="all-movies">
           <h2>All Movies</h2>
+
+          {isLoading ? (
+            <p className="text-white">Loading...</p>
+          ) : errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : (
+            <ul>
+              {movieList.map((movie) => (
+                <p key={movie.id} className="text-white">{movie.title}</p>
+              ))}
+            </ul>
+          )}
 
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </section>
