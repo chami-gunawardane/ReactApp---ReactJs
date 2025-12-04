@@ -3,6 +3,7 @@ import "./App.css";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
+import { useDebounce } from "react-use";
 //API - Appliation Programming Interface - a set of rules that allows different software entities to communicate with each other.
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -20,6 +21,12 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+
+  // Debunce the search term to limit API calls
+  //by waiting for the user ro stop typing for 500ms
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
   const fetchMovies = async (query = "") => {
     setIsLoading(true);
@@ -51,8 +58,8 @@ function App() {
   };
 
   useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [searchTerm]);
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   return (
     <main>
